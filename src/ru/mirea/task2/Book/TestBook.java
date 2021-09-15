@@ -1,6 +1,5 @@
 package ru.mirea.task2.Book;
 
-import Ball.Ball;
 
 public class TestBook {
     public static void main(String[] args) {
