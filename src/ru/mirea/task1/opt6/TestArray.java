@@ -1,4 +1,4 @@
-package ru.mirea.task1.opt1;
+package ru.mirea.task1.opt6;
 
 public class TestArray {
     public static void main(String[] args){
