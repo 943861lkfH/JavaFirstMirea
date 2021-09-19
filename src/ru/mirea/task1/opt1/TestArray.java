@@ -1,11 +1,21 @@
-package Laba1;
+package ru.mirea.task1.opt1;
 
 public class TestArray {
     public static void main(String[] args){
-        Array mas = new Array();
-        mas.setArray();
+        Array mas1 = new Array();
+        System.out.println("Array1: ");
+        mas1.rand1();
+        mas1.setArray();
         System.out.println();
-        mas.sort();
-        mas.setArray();
+        mas1.sort();
+        mas1.setArray();
+        System.out.println();
+        Array mas2 = new Array();
+        System.out.println("Array2: ");
+        mas2.rand1();
+        mas2.setArray();
+        System.out.println();
+        mas2.sort();
+        mas2.setArray();
     }
 }
