@@ -1,4 +1,4 @@
-package Laba3;
+package ru.mirea.task5.dish;
 
 public abstract class Dish {
     private String material;

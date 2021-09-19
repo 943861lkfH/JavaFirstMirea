@@ -1,4 +1,4 @@
-package Laba3;
+package ru.mirea.task5.dish;
 
 public class Main {
     public static void main(String[] args){

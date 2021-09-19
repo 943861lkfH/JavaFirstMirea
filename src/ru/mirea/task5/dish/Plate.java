@@ -1,4 +1,4 @@
-package Laba3;
+package ru.mirea.task5.dish;
 
 public class Plate extends Dish {
     private String form;
