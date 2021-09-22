@@ -1,4 +1,4 @@
-package ru.mirea.task1.op5;
+package ru.mirea.task1.opt4;
 
 public class TestSum {
     public static void main(String[] ars){
