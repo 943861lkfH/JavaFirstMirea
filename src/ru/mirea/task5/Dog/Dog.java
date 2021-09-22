@@ -14,7 +14,7 @@ public class Dog
         weight = 0;
     }
     public Dog(){
-        name = "Tuzik";
+        name = "Pes";
         weight = 0;
     }
     public void setWeight(int w) {
