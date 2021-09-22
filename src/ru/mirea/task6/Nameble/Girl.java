@@ -1,4 +1,4 @@
-package ru.mirea.task6;
+package ru.mirea.task6.Nameble;
 
 public class Girl implements Nameable {
     public String getName(String name){
