@@ -12,7 +12,7 @@ public class TestArray {
         System.out.println();
         Array mas2 = new Array();
         System.out.println("Array2: ");
-        mas2.rand1();
+        mas2.rand2();
         mas2.setArray();
         System.out.println();
         mas2.sort();
