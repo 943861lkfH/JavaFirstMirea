@@ -3,23 +3,53 @@ package ru.mirea.task7.Shape;
 public class Rectangle extends Shape{
     protected double width;
     protected double length;
-    public Rectangle(){
+
+    public Rectangle() {
+    }
+
+    public Rectangle(String color, boolean filled){
         width = 0;
+        length = 0;
     }
-    public Rectangle(double radius){
-        this.radius = radius;
+    public Rectangle(double width, double length){
+        this.width = width;
+        this.length = length;
     }
-    public Rectangle(double radius, String color, boolean filled){
+    public Rectangle(String color, boolean filled, double width, double length) {
         super(color, filled);
-        this.radius = radius;
+        this.width = width;
+        this.length = length;
     }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
     public double getArea(){
-        return Math.PI*radius*radius;
+        return width*length;
     }
+
+    public String toString() {
+        return "Rectangle{" +
+                "width=" + width +
+                ", length=" + length +
+                '}';
+    }
+
     public double getPerimeter() {
-        return 2*Math.PI*radius;
+        return 2*width+2*length;
     }
-    public String toString(){
-        return ("Circle, radius = "+radius+", colour = "+color+", filled - "+ filled);
-    }
+
 }
