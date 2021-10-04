@@ -2,7 +2,7 @@ package ru.mirea.task7.Movable;
 
 public class MovableCircle implements Movable {
     public int radius;
-    public MovablePoint center;
+    public MovablePoint center = new MovablePoint();
 
     public MovableCircle(int x, int y, int xSpeed, int ySpeed, int radius) {
         center.x = x;
@@ -14,8 +14,8 @@ public class MovableCircle implements Movable {
 
     public String toString() {
         return "MovableCircle{" +
-                "radius=" + radius +
-                ", center=" + center +
+                "radius = " + radius +
+                ", center = " + center.x + ", " + center.y +
                 '}';
     }
 
