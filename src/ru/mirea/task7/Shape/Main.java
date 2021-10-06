@@ -1,7 +1,5 @@
 package ru.mirea.task7.Shape;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
         Shape s1 = new Circle(5.5, "RED", false); // Upcast Circle to Shape
@@ -43,8 +41,7 @@ public class Main {
         System.out.println(r2.getArea());
         System.out.println(r2.getColor());
         //System.out.println(r2.getSide()); // такого метода нет в классе Rectangle
-        System.out.println(r2.getLength());
-        // Downcast Rectangle r2 to Square
+        System.out.println(r2.getLength()); // Downcast Rectangle r2 to Square
         Square sq1 = (Square)r2;
         System.out.println(sq1);
         System.out.println(sq1.getArea());
