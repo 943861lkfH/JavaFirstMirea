@@ -56,10 +56,12 @@ public class TeamApplication extends Application {
                 click1.getAndIncrement();
                 ref1.label1.setText("Result: " + click1 + " X " + click2);
                 ref2.label2.setText("Last Scorer: Winx.");
-                if (click1.get() > click2.get()) {
+                if (click1.get() > click2.get())
                     ref3.label3.setText("Winner: Winx");
-                } else if(click1.get() != click2.get()){
-                    ref3.label3.setText("Winner: W.I.T.C.H.");
+                else{
+                    if (click1.get() != click2.get())
+                        ref3.label3.setText("Winner: W.I.T.C.H.");
+                    else ref3.label3.setText("Winner: Winx / W.I.T.C.H.");
                 }
 
             }
@@ -76,11 +78,14 @@ public class TeamApplication extends Application {
                 click2.getAndIncrement();
                 ref1.label1.setText("Result: " + click1 + " X " + click2);
                 ref2.label2.setText("Last Scorer: W.I.T.C.H.");
-                if (click1.get() > click2.get()) {
+                if (click1.get() > click2.get())
                     ref3.label3.setText("Winner: Winx");
-                } else if(click1.get() != click2.get()){
-                    ref3.label3.setText("Winner: W.I.T.C.H.");
+                else {
+                    if (click1.get() != click2.get())
+                        ref3.label3.setText("Winner: W.I.T.C.H.");
+                    else ref3.label3.setText("Winner: Winx / W.I.T.C.H.");
                 }
+
             }
         });
 
