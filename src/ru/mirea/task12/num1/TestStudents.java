@@ -6,16 +6,16 @@ public class TestStudents {
 
     public static void setMas(){
         student = new Students[10];
-        student[0] = new Students(12,"Sem","Brown",1);
-        student[1] = new Students(5,"Bob","Bob",2);
-        student[2] = new Students(10,"Mike","Shell",1);
-        student[3] = new Students(7,"Lora","Palmer",3);
-        student[4] = new Students(1,"Donna","Hayward",3);
-        student[5] = new Students(2,"Bobby","Briggs",4);
-        student[6] = new Students(8,"Natan","Brush",1);
-        student[7] = new Students(11,"Audrey","Horne",3);
-        student[8] = new Students(4,"Joan","Chen",2);
-        student[9] = new Students(3,"Henk","Jennings",2);
+        student[0] = new Students(6,"Sem","Brown",3.5,1);
+        student[1] = new Students(5,"Bob","Bob", 4.0, 2);
+        student[2] = new Students(10,"Mike","Shell",4.7, 1);
+        student[3] = new Students(7,"Lora","Palmer",3.9, 3);
+        student[4] = new Students(1,"Donna","Hayward",2.8, 3);
+        student[5] = new Students(2,"Bobby","Briggs",4.65, 4);
+        student[6] = new Students(8,"Natan","Brush",4.33, 1);
+        student[7] = new Students(9,"Audrey","Horne",3.75, 3);
+        student[8] = new Students(4,"Joan","Chen",3.5, 2);
+        student[9] = new Students(3,"Henk","Jennings", 4.6, 2);
     }
 
     public static void sortInsertion(){

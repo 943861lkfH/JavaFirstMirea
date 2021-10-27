@@ -5,13 +5,24 @@ public class Students {
     private String name;
     private String surname;
     private int course;
+    private double GPA;
 
-    public Students(int iDNumber, String name, String surname, int course) {
+    public Students(int iDNumber, String name, String surname, double GPA, int course) {
         this.iDNumber = iDNumber;
         this.name = name;
         this.surname = surname;
+        this.GPA = GPA;
         this.course = course;
     }
+
+    public double getGPA() {
+        return GPA;
+    }
+
+    public void setGPA(int GPA) {
+        this.GPA = GPA;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -50,6 +61,7 @@ public class Students {
                 "name='" + name + '\'' +
                 ", iDNumber=" + iDNumber +
                 ", surname='" + surname + '\'' +
+                ", GPA=" + GPA +
                 ", course=" + course +
                 '}';
     }
