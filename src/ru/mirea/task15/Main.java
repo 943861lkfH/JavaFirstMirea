@@ -28,7 +28,7 @@ public class Main {
         }
     }
     public static void outputFile(String fileName){
-        try(FileReader reader = new FileReader("C:/Users/Эльдорадо/IdeaProjects/JavaFirstMirea/src/ru/mirea/task15/fileJava.txt"))
+        try(FileReader reader = new FileReader(fileName))
         {
             char[] buf = new char[256];
             int c;
