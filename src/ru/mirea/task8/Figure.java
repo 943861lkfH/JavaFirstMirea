@@ -91,8 +91,8 @@ public class Figure extends Application {
 
         Image image = new Image("C:/Users/Эльдорадо/Pictures/gZVlsTlqicE.jpg");
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(300);
-        imageView.setFitWidth(300);
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
         BorderPane pane = new BorderPane();
         pane.setPrefSize(800, 600);
         pane.setCenter(imageView);
