@@ -14,10 +14,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 
     public class Board extends JPanel implements ActionListener {
 
@@ -47,6 +50,19 @@ import javax.swing.Timer;
         private int[] dx, dy;
         private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
 
+
+
+        public enum Speed{
+            high(8),
+            medium(6),
+            average(4),
+            slow(2);
+            int speed;
+            Speed(int speed){
+                this.speed = speed;
+            }
+        }
+
         private Image ghost;
         private Image pacman1, pacman2up, pacman2left, pacman2right, pacman2down;
         private Image pacman3up, pacman3down, pacman3left, pacman3right;
@@ -54,6 +70,13 @@ import javax.swing.Timer;
 
         private int pacman_x, pacman_y, pacmand_x, pacmand_y;
         private int req_dx, req_dy, view_dx, view_dy;
+
+        private int level = 0;
+        private long startTime;
+        private long elapsedTime;
+        private long elapsedSeconds = 0;
+
+        private static HashMap<String, Integer> ghostss = new HashMap<>();
 
         private final short levelData[] = {
                 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
@@ -73,7 +96,7 @@ import javax.swing.Timer;
                 9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 25, 24, 24, 24, 28
         };
 
-        private final int validSpeeds[] = {1, 2, 3, 4, 6, 8};
+        private final int validSpeeds[] = {Speed.slow.speed, Speed.slow.speed,Speed.average.speed, Speed.average.speed,  Speed.medium.speed, Speed.medium.speed, Speed.medium.speed, Speed.high.speed};
         private final int maxSpeed = 6;
 
         private int currentSpeed = 3;
@@ -113,6 +136,20 @@ import javax.swing.Timer;
             timer.start();
         }
 
+        private static void setImage() {
+
+            ghostss.put("PAC_ANIM_DELAY", 2);
+            ghostss.put("PACMAN_ANIM_COUNT", 4);
+            ghostss.put("MAX_GHOSTS", 12);
+            ghostss.put("PACMAN_SPEED", 6);
+            ghostss.put("pacAnimDir", 1);
+            ghostss.put("pacmanAnimPos", 0);
+        }
+        public static HashMap<String, Integer> Ghost(){
+            setImage();
+            return ghostss;
+        }
+
         @Override
         public void addNotify() {
             super.addNotify();
@@ -133,19 +170,36 @@ import javax.swing.Timer;
                 }
             }
         }
+        protected void death() {
+            System.out.println("death");
+        }
 
         private void playGame(Graphics2D g2d) {
 
             if (dying) {
+                Board bo = new Board(){
 
-                death();
+                    @Override
+                    protected void death() {
+
+                        pacsLeft--;
+
+                        if (pacsLeft == 0) {
+                            inGame = false;
+                        }
+
+                        continueLevel();
+                    }
+
+                };
+                bo.death();
 
             } else {
 
                 movePacman();
                 drawPacman(g2d);
                 moveGhosts(g2d);
-                checkMaze();
+                checkMaze(g2d);
             }
         }
 
@@ -156,7 +210,7 @@ import javax.swing.Timer;
             g2d.setColor(Color.white);
             g2d.drawRect(50, SCREEN_SIZE / 2 - 30, SCREEN_SIZE - 100, 50);
 
-            String s = "Press s to start.";
+            String s = "Press s to start";
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = this.getFontMetrics(small);
 
@@ -172,15 +226,21 @@ import javax.swing.Timer;
 
             g.setFont(smallFont);
             g.setColor(new Color(96, 128, 255));
-            s = "Score: " + score;
-            g.drawString(s, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
+            if(pacsLeft != 0) {
+                elapsedTime = System.currentTimeMillis() - startTime;
+                elapsedSeconds = elapsedTime / 1000;
+            }
+            else elapsedSeconds = 0;
+
+            s = "Score: " + score + "  Time: " + elapsedSeconds;
+            g.drawString(s, SCREEN_SIZE / 2 + 35, SCREEN_SIZE + 16);
 
             for (i = 0; i < pacsLeft; i++) {
                 g.drawImage(pacman3left, i * 28 + 8, SCREEN_SIZE + 1, this);
             }
         }
 
-        private void checkMaze() {
+        private void checkMaze(Graphics2D g2d) {
 
             short i = 0;
             boolean finished = true;
@@ -206,20 +266,13 @@ import javax.swing.Timer;
                     currentSpeed++;
                 }
 
+                g2d.drawImage(ii, 5, 5, this);
+                Toolkit.getDefaultToolkit().sync();
+                g2d.dispose();
                 initLevel();
             }
         }
 
-        private void death() {
-
-            pacsLeft--;
-
-            if (pacsLeft == 0) {
-                inGame = false;
-            }
-
-            continueLevel();
-        }
 
         private void moveGhosts(Graphics2D g2d) {
 
@@ -304,7 +357,7 @@ import javax.swing.Timer;
             int pos;
             short ch;
 
-            if (req_dx == -pacmand_x && req_dy == -pacmand_y) {
+            if (Board.this.req_dx == -pacmand_x && req_dy == -pacmand_y) {
                 pacmand_x = req_dx;
                 pacmand_y = req_dy;
                 view_dx = pacmand_x;
@@ -348,7 +401,7 @@ import javax.swing.Timer;
         private void drawPacman(Graphics2D g2d) {
 
             if (view_dx == -1) {
-                drawPacnanLeft(g2d);
+               drawPacnanLeft(g2d);
             } else if (view_dx == 1) {
                 drawPacmanRight(g2d);
             } else if (view_dy == -1) {
@@ -430,6 +483,7 @@ import javax.swing.Timer;
             }
         }
 
+
         private void drawMaze(Graphics2D g2d) {
 
             short i = 0;
@@ -476,12 +530,12 @@ import javax.swing.Timer;
             initLevel();
             N_GHOSTS = 6;
             currentSpeed = 3;
+            startTime = System.currentTimeMillis();
         }
 
         private void initLevel() {
 
-            int i;
-            for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
+            for (int i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
                 screenData[i] = levelData[i];
             }
 
@@ -521,23 +575,26 @@ import javax.swing.Timer;
             dying = false;
         }
 
-        private void loadImages() {
-
-            ghost = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//ghost.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman1 = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacman.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman2up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanUp2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman3up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanUp3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman4up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanUp4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman2down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanDown2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman3down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanDown3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman4down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanDown4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman2left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanLeft2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman3left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanLeft3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman4left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacmanLeft4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman2right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacman2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman3right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacman3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-            pacman4right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Рабочий стол//pacman4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-
+        private void loadImages(){
+            try {
+                ghost = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//ghost.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman1 = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacman.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman2up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanUp2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman3up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanUp3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman4up = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanUp4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman2down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanDown2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman3down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanDown3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman4down = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanDown4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman2left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanLeft2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman3left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanLeft3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman4left = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacmanLeft4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman2right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacman2.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman3right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacman3.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+                pacman4right = new ImageIcon("C://Users//Эльдорадо//OneDrive//Документы//Университет//pacman_game//pacman4.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+            }
+            catch(Exception ex){
+                System.out.println(ex.getMessage() + "image is not found");
+            }
         }
 
         @Override
@@ -561,6 +618,7 @@ import javax.swing.Timer;
             if (inGame) {
                 playGame(g2d);
             } else {
+                level = 1;
                 showIntroScreen(g2d);
             }
 
@@ -589,17 +647,28 @@ import javax.swing.Timer;
                     } else if (key == KeyEvent.VK_DOWN) {
                         req_dx = 0;
                         req_dy = 1;
-                    } else if (key == KeyEvent.VK_ESCAPE && timer.isRunning()) {
-                        inGame = false;
-                    } else if (key == KeyEvent.VK_PAUSE) {
-                        if (timer.isRunning()) {
-                            timer.stop();
-                        } else {
-                            timer.start();
+                    } else if (key == KeyEvent.VK_ESCAPE) {
+                        try{
+                            if(!timer.isRunning())
+                                throw new MyExeptionClass();
                         }
+                        catch(MyExeptionClass exp)
+                        {
+                            System.out.println("Exception: "+exp.toString());
+                        }
+                        inGame = false;
                     }
+                        if (key == KeyEvent.VK_PAUSE) {
+                            if (timer.isRunning()) {
+                                timer.stop();
+                            } else {
+                                timer.start();
+                            }
+                        }
+
                 } else {
                     if (key == 's' || key == 'S') {
+
                         inGame = true;
                         initGame();
                     }
